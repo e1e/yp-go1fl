@@ -19,7 +19,7 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	// ваш код ниже
 	sData := strings.Split(data, ",")
 	if len(sData) != 3 {
-		return 0, "", 0, errors.New("")
+		return 0, "", 0, errors.New("invalid input data")
 	}
 
 	steps, err := strconv.Atoi(sData[0])
@@ -58,7 +58,7 @@ func meanSpeed(steps int, duration time.Duration) float64 {
 	}
 	distance := distance(steps)
 
-	return distance / float64(duration.Hours())
+	return distance / duration.Hours()
 }
 
 // Константы для расчета калорий, расходуемых при беге.
@@ -118,10 +118,6 @@ func TrainingInfo(data string, weight, height float64) string {
 		return err.Error()
 	}
 
-	if training != "Бег" && training != "Хотяба" {
-		return "неизвестный тип тренировки"
-	}
-
 	distance := distance(steps)
 	meanSpeed := meanSpeed(steps, duration)
 
@@ -131,6 +127,8 @@ func TrainingInfo(data string, weight, height float64) string {
 		spentCalories = RunningSpentCalories(steps, weight, duration)
 	case "Ходьба":
 		spentCalories = WalkingSpentCalories(steps, weight, height, duration)
+	default:
+		return "неизвестный тип тренировки"
 	}
 
 	return fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f", training, duration.Hours(), distance, meanSpeed, spentCalories)

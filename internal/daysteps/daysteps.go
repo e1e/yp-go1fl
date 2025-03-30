@@ -10,6 +10,8 @@ import (
 	"yp-go1fl/internal/spentcalories"
 )
 
+const mInKm = 1000
+
 var (
 	StepLength = 0.65 // длина шага в метрах
 )
@@ -18,7 +20,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 	// ваш код ниже
 	sData := strings.Split(data, ",")
 	if len(sData) != 2 {
-		return 0, 0, errors.New("")
+		return 0, 0, errors.New("invalid input data")
 	}
 
 	steps, err := strconv.Atoi(sData[0])
@@ -50,11 +52,12 @@ func DayActionInfo(data string, weight, height float64) string {
 		return ""
 	}
 	if steps <= 0 {
+		fmt.Println(err)
 		return ""
 	}
 
 	distance := float64(steps) * StepLength
-	distance = distance / 1000
+	distance = distance / mInKm
 
 	spentCalories := spentcalories.WalkingSpentCalories(steps, weight, height, duration)
 
